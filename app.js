@@ -10,8 +10,8 @@ const routes = require('./Routes/index')
 const port = process.env.PORT || 5001;
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 app.use(bodyParser.json());
+app.use('/', routes);
 app.use((request, response) => {
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -19,10 +19,8 @@ app.use((request, response) => {
     next();
 });
 
-app.use('/', routes);
-
 mongoose.connect(
-    'mongodb+srv://<team8>:<Team8Go>@cluster0.t6yet.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+    'mongodb+srv://team8:Team8Go@cluster0.t6yet.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
