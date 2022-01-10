@@ -10,6 +10,7 @@ exports.registerUser = (request, response) => {
     const existingUser = UserDetails.findOne({ email: userDetails.email }, function (err, obj) {
         if (err) {
             var varResult = {
+                status: "failed",
                 message: "Failed in Validation",
                 statusCode: 500
             };
@@ -20,6 +21,7 @@ exports.registerUser = (request, response) => {
             if (obj != null && (obj.email === userDetails.email)) {
                 console.log("User already registered: ");
                 var varResult = {
+                    status: "success",
                     message: "User is already registered",
                     statusCode: 409
                 };
@@ -29,6 +31,7 @@ exports.registerUser = (request, response) => {
                     if (err) {
                         console.log("Error in saving User: ", err);
                         var varResult = {
+                            status: "failed",
                             message: "User registration failed",
                             statusCode: 500
                         };
@@ -37,6 +40,7 @@ exports.registerUser = (request, response) => {
                     else {
                         console.log("User Registered successfully: ", result);
                         var varResult = {
+                            status: "success",
                             message: "User Registered successfully: ", varResult,
                             statusCode: 201
                         };
