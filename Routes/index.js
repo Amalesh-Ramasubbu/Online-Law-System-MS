@@ -9,7 +9,7 @@ const AdminController = require('../Controllers/AdminController');
 // Routes
 router.post('/registerUser', UserController.registerUser);
 router.post('/login', UserController.loginUser);
-router.post('/updateIPCSection', AdminController.updateIPCSection);
-router.get('/getIPCSections', AdminController.getIPCSections);
+router.post('/updateIPCLaw', AdminController.updateIPCLaw);
+router.get('/getIPCLaws', AdminController.getIPCLaws);
 
 module.exports = router;

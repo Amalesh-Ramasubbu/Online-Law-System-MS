@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const IPCSctionSchema = new Schema(
+const IPCLawSchema = new Schema(
     {
         section_no:{
             type: Number,
@@ -15,4 +15,4 @@ const IPCSctionSchema = new Schema(
     }
 );
 
-module.exports = mongoose.model('IPCSctionSchema', IPCSctionSchema, 'ipc_section');
+module.exports = mongoose.model('IPCLawDetails', IPCLawSchema, 'ipc_law');
