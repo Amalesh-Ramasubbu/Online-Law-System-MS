@@ -5,7 +5,12 @@ const UserDetails = require('../Models/UserDetails');
 exports.registerUser = (request, response) => {
     console.log("Register User begins");
     const userDetails = new UserDetails(request.body);
-    userDetails.role = "Public";
+    console.log("User Role: ", userDetails.role);
+    if(userDetails.role == 'Public'){
+        userDetails.user_status = 'Active';
+    }else if(userDetails.role == 'Lawyer'){
+        userDetails.user_status = 'New';
+    }
     userDetails.hashPassword = bcrypt.hashSync(request.body.password, 10);
 
     UserDetails.findOne({
@@ -72,20 +77,50 @@ exports.loginUser = (request, response) => {
                 statusCode: 401
             })
         }else{
-            if (!user.comparePassword(request.body.password, user.hashPassword)){
+            console.log("User status :", user.user_status);
+            if (user.comparePassword(request.body.password, user.hashPassword)
+                && user.user_status == 'Active'){
+                    return response.json({token: jwt.sign({
+                        email: user.email,
+                        name: user.name,
+                        _id: user.id
+                    },
+                    'SecureAPIs')});
+            }else{
+                console.log("Invalid Credentials. Authentiaction failed");
                 response.status(401).json({
                     status: "failed",
                     message: 'Invalid Credentials, Please try again..',                    
                     statusCode: 401
                 });
-            }else {
-                return response.json({token: jwt.sign({
-                    email: user.email,
-                    name: user.name,
-                    _id: user.id
-                },
-                'SecureAPIs')});
-            }
+            }            
         }
     })
+}
+
+exports.getUsersByRole = (req, res) => {
+    console.log("Fetch Users with role begins for : ", req.params.role);
+    UserDetails.find({role: req.params.role}).then(result => {
+        if(result.length <= 0){
+            res.status(200).json({
+                status: "success",
+                message: 'User details not found for this role',
+                statusCode: 200
+            });
+            return;
+        }
+        res.status(200).json({
+            status: "success",
+            message: 'User details fetched successfully',
+            laws: result,
+            statusCode: 200
+        });
+    }).catch(error => {
+        console.log("Failed to fetch Lawyer details. ", error);
+        res.status(500).json({
+            status: "failed",
+            message: 'Failed to fetch User details',
+            statusCode: 500
+        });
+    });
 }

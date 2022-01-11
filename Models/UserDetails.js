@@ -24,6 +24,10 @@ const UserSchema = new Schema(
         role:{
             type: String,
             required: true
+        },
+        user_status:{
+            type: String,
+            required: true
         }
     }
 );

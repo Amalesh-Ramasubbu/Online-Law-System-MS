@@ -78,17 +78,18 @@ exports.updateIPCLaw = (request, response) => {
     });
 }
 
-exports.getIPCLaws = (req, res) => {
+exports.getIPCLaws = (request, response) => {
     console.log("Fetch IPC Laws begins");
     IPCLawDetails.find().then(result => {
-        res.status(200).json({
+        response.status(200).json({
             status: "success",
             message: 'IPC Laws fetched successfully',
             laws: result,
             statusCode: 200
         });
     }).catch(error => {
-        res.status(500).json({
+        console.log("Failed to fetch IPC Laws. ", error);
+        response.status(500).json({
             status: "failed",
             message: 'Failed to fetch IPC Laws',
             statusCode: 500
